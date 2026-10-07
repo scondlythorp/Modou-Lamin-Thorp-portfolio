@@ -1,25 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { SidebarNav } from './components/SidebarNav';
 import { HeroSection } from './components/HeroSection';
-import { CredibilitySnapshot } from './components/CredibilitySnapshot';
 import { AboutSection } from './components/AboutSection';
 import { FeaturedProjects } from './components/FeaturedProjects';
 import { SkillsSection } from './components/SkillsSection';
 import { JourneySection } from './components/JourneySection';
 import { OpportunitiesSection } from './components/OpportunitiesSection';
+import { ChiaLinkSection } from './components/ChiaLinkSection';
+import { GitHubSection } from './components/GitHubSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
-import { CaseStudyModal } from './components/CaseStudyModal';
-import { ProjectArchiveModal } from './components/ProjectArchiveModal';
-import { ResumeModal } from './components/ResumeModal';
 import { PROJECTS_DATA } from './data/projectsData';
-import { Project } from './types';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('hero');
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isResumeOpen, setIsResumeOpen] = useState(false);
-  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
 
   // Smooth navigation handler
   const handleNavigate = (sectionId: string) => {
@@ -40,7 +34,7 @@ export default function App() {
   // Track active section on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'about', 'projects', 'skills', 'journey', 'opportunities', 'contact'];
+      const sections = ['hero', 'about', 'skills', 'projects', 'chialink', 'journey', 'github', 'opportunities', 'contact'];
       const scrollPosition = window.scrollY + 200;
 
       for (const section of sections) {
@@ -66,8 +60,6 @@ export default function App() {
       <SidebarNav
         activeSection={activeSection}
         onNavigate={handleNavigate}
-        onOpenResume={() => setIsResumeOpen(true)}
-        onOpenArchive={() => setIsArchiveOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -75,62 +67,35 @@ export default function App() {
         {/* Hero Section */}
         <HeroSection
           onExploreProjects={() => handleNavigate('projects')}
-          onOpenResume={() => setIsResumeOpen(true)}
           onNavigateToContact={() => handleNavigate('contact')}
         />
 
-        {/* Recruiter & Engineering Snapshot */}
-        <CredibilitySnapshot />
-
-        {/* About & Engineering Story */}
+        {/* Professional introduction */}
         <AboutSection />
 
-        {/* Featured Technical Projects */}
-        <FeaturedProjects
-          projects={PROJECTS_DATA}
-          onSelectProject={(proj) => setSelectedProject(proj)}
-          onOpenArchive={() => setIsArchiveOpen(true)}
-        />
-
-        {/* Skills & Architecture Stack */}
+        {/* Technical skills appear before projects */}
         <SkillsSection />
 
-        {/* Professional Journey & Education */}
+        {/* Projects */}
+        <FeaturedProjects
+          projects={PROJECTS_DATA}
+        />
+
+        <ChiaLinkSection />
+
+        {/* Education and training */}
         <JourneySection />
 
-        {/* Target Opportunities & Recruiter Alignment */}
-        <OpportunitiesSection
-          onContactClick={() => handleNavigate('contact')}
-        />
+        <GitHubSection />
 
-        {/* Direct Contact & Form */}
-        <ContactSection onOpenResume={() => setIsResumeOpen(true)} />
+        {/* Career interests */}
+        <OpportunitiesSection />
 
-        {/* Footer */}
-        <Footer
-          onNavigate={handleNavigate}
-          onOpenResume={() => setIsResumeOpen(true)}
-          onOpenArchive={() => setIsArchiveOpen(true)}
-        />
+        {/* Contact */}
+        <ContactSection />
+
+        <Footer />
       </main>
-
-      {/* Modals */}
-      <CaseStudyModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
-
-      <ProjectArchiveModal
-        isOpen={isArchiveOpen}
-        onClose={() => setIsArchiveOpen(false)}
-        projects={PROJECTS_DATA}
-        onSelectProject={(proj) => setSelectedProject(proj)}
-      />
-
-      <ResumeModal
-        isOpen={isResumeOpen}
-        onClose={() => setIsResumeOpen(false)}
-      />
     </div>
   );
 }
